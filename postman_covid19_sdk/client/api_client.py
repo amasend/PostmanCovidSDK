@@ -4,6 +4,7 @@ from typing import Dict
 from .base_client import BaseClient
 
 from pandas import DataFrame
+from pandas import to_datetime
 from datetime import datetime
 
 __all__ = [
@@ -104,7 +105,9 @@ class APIClient(BaseClient):
 
         response = requests.request("GET", url, headers=headers, data=payload)
 
-        return DataFrame(response.json()).set_index('Date')
+        data = self._date_index(response)
+
+        return data
 
     def get_by_country(self,
                        country: 'APIClient.Country',
@@ -143,7 +146,9 @@ class APIClient(BaseClient):
 
         response = requests.request("GET", url, headers=headers, data=payload)
 
-        return DataFrame(response.json()).set_index('Date')
+        data = self._date_index(response)
+
+        return data
 
     def stream_live(self,
                     country: 'APIClient.Country',
@@ -215,3 +220,12 @@ class APIClient(BaseClient):
 
         return response.json()
 
+    @staticmethod
+    def _date_index(response) -> 'DataFrame':
+        """Set 'Date' as an index and convert it to a datetime representation."""
+        data = DataFrame(response.json())
+        data["Date"] = to_datetime(data["Date"], format="%Y-%m-%d %H:%M")
+        data.index = data["Date"]
+        data.drop("Date", 1, inplace=True)
+
+        return data
