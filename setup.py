@@ -7,8 +7,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 PROJECT_URLS = {
-    'Bug Tracker': '...',
-    'Source Code': '...'
+    'Bug Tracker': 'https://github.com/amasend/PostmanCovidSDK/issues',
+    'Source Code': 'https://github.com/amasend/PostmanCovidSDK'
 }
 
 setuptools.setup(
@@ -23,7 +23,7 @@ setuptools.setup(
         'requests',
         'pandas'
     ],
-    url="...",
+    url="https://github.com/amasend/PostmanCovidSDK",
     packages=setuptools.find_packages(exclude=["tests"]),
     license="Apache Software License",
     classifiers=[
