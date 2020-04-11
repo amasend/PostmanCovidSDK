@@ -184,7 +184,9 @@ class APIClient(BaseClient):
 
         response = requests.request("GET", url, headers=headers, data=payload)
 
-        return response.json()
+        data = self._date_index(response)
+
+        return data
 
     def get_all_data(self) -> dict:
         """
