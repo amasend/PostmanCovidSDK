@@ -123,7 +123,9 @@ class TestAPIClient(unittest.TestCase):
         print(results)
 
     def test_06_stream_live(self):
-        results = self.client.stream_live(country=self.client.Countries.POLAND)
+        import datetime
+        now = datetime.datetime.now() - datetime.timedelta(days=1)
+        results = self.client.stream_live(country=self.client.Countries.POLAND, date=f'{now.strftime("%Y-%m-%d")}T00:00:00Z')
 
         print(results)
 

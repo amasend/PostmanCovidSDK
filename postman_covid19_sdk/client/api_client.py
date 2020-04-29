@@ -153,7 +153,7 @@ class APIClient(BaseClient):
     def stream_live(self,
                     country: 'APIClient.Country',
                     status: 'APIClient.StatusType' = BaseClient.StatusType.CONFIRMED,
-                    date: 'datetime' = None) -> dict:
+                    date: 'datetime' = None) -> 'DataFrame':
         """
         Returns all live cases by case type for a country. These records are pulled every 10 minutes and are ungrouped.
 
@@ -226,6 +226,10 @@ class APIClient(BaseClient):
     def _date_index(response) -> 'DataFrame':
         """Set 'Date' as an index and convert it to a datetime representation."""
         data = DataFrame(response.json())
+        # note: API returns incorrect data in last row, check it and remove it
+        if '0001' in str(data.iloc[-1]['Date']):
+            data = data.iloc[:-1]
+        # --- end note
         data["Date"] = to_datetime(data["Date"], format="%Y-%m-%d %H:%M")
         data.index = data["Date"]
         data.drop("Date", 1, inplace=True)
